@@ -1,0 +1,216 @@
+# Created by https://www.toptal.com/developers/gitignore/api/macos,windows,archives,backup,test,git,dotenv,visualstudiocode
+# Edit at https://www.toptal.com/developers/gitignore?templates=macos,windows,archives,backup,test,git,dotenv,visualstudiocode
+
+### Archives ###
+# It's better to unpack these files and commit the raw source because
+# git has its own built in compression methods.
+*.7z
+*.jar
+*.rar
+*.zip
+*.gz
+*.gzip
+*.tgz
+*.bzip
+*.bzip2
+*.bz2
+*.xz
+*.lzma
+*.cab
+*.xar
+
+# Packing-only formats
+*.iso
+*.tar
+
+# Package management formats
+*.dmg
+*.xpi
+*.gem
+*.egg
+*.deb
+*.rpm
+*.msi
+*.msm
+*.msp
+*.txz
+
+### Backup ###
+*.bak
+*.gho
+*.ori
+*.orig
+*.tmp
+
+### dotenv ###
+.env
+
+### Git ###
+# Created by git for backups. To disable backups in Git:
+# $ git config --global mergetool.keepBackup false
+
+# Created by git when using merge tools for conflicts
+*.BACKUP.*
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*
+*_BACKUP_*.txt
+*_BASE_*.txt
+*_LOCAL_*.txt
+*_REMOTE_*.txt
+
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+### macOS Patch ###
+# iCloud generated files
+*.icloud
+
+### Test ###
+### Ignore all files that could be used to test your code and
+### you wouldn't want to push
+
+# Reference https://en.wikipedia.org/wiki/Metasyntactic_variable
+
+# Most common
+*foo
+*bar
+*fubar
+*foobar
+*baz
+
+# Less common
+*qux
+*quux
+*bongo
+*bazola
+*ztesch
+
+# UK, Australia
+*wibble
+*wobble
+*wubble
+*flob
+*blep
+*blah
+*boop
+*beep
+
+# Japanese
+*hoge
+*piyo
+*fuga
+*hogera
+*hogehoge
+
+# Portugal, Spain
+*fulano
+*sicrano
+*beltrano
+*mengano
+*perengano
+*zutano
+
+# France, Italy, the Netherlands
+*toto
+*titi
+*tata
+*tutu
+*pipppo
+*pluto
+*paperino
+*aap
+*noot
+*mies
+
+# Other names that would make sense
+*tests
+*testsdir
+*testsfile
+*testsfiles
+*test
+*testdir
+*testfile
+*testfiles
+*testing
+*testingdir
+*testingfile
+*testingfiles
+*temp
+*tempdir
+*tempfile
+*tempfiles
+*tmp
+*tmpdir
+*tmpfile
+*tmpfiles
+*lol
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
+
+### Windows ###
+# Windows thumbnail cache files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
+# Dump file
+*.stackdump
+
+# Folder config file
+[Dd]esktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.msix
+
+# Windows shortcuts
+*.lnk
+
+# End of https://www.toptal.com/developers/gitignore/api/macos,windows,archives,backup,test,git,dotenv,visualstudiocode

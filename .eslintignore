@@ -1,0 +1,9 @@
+**/*.min.*
+**/*.map
+
+modernizr.js
+
+node_modules/**/*
+
+assets/**/*
+dist/**/*

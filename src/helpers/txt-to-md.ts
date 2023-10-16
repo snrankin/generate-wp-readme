@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import { fullPath, fileContents, getProjectSlug, log, StringDictionary, arraysToObject } from './utils';
+import { fullPath, fileContents, getProjectSlug, log, arraysToObject } from './utils';
 import path from 'path';
 import chalk from 'chalk';
 function contributors(readme: string): string {
@@ -28,15 +28,13 @@ function contributors(readme: string): string {
 	return readme;
 }
 
-function screenshots(readme: string, screenshotUrl: string, screenshotsDir: string): string {
+function screenshots(readme: string, packageFile: string, screenshotsDir: string): string {
 	// process screenshots, if any
 	const screenshotMatch = readme.match(new RegExp('## Screenshots ##([^#]*)', 'im'));
-	if (screenshotUrl && screenshotMatch && screenshotMatch.length > 1) {
-		const plugin = getProjectSlug();
-
+	if (packageFile && screenshotMatch && screenshotMatch.length > 1) {
 		const imageDir = fullPath(screenshotsDir);
 
-		const imageDirRel = path.relative(process.cwd(), imageDir);
+		const packagePath = path.dirname(fullPath(packageFile));
 
 		// Collect screenshots content
 
@@ -44,10 +42,10 @@ function screenshots(readme: string, screenshotUrl: string, screenshotsDir: stri
 
 		let files = fs.readdirSync(imageDir);
 
-		console.log('🚀 ~ file: txt-to-md.ts:48 ~ screenshots ~ files :', files);
 		if (files.length > 0) {
 			files.forEach(function (file) {
-				screenshotFiles.push(`./${imageDirRel}/${file}`);
+				const imageDirRel = path.relative(packagePath, path.join(imageDir, file));
+				screenshotFiles.push(imageDirRel);
 			});
 		}
 
@@ -76,7 +74,7 @@ function screenshots(readme: string, screenshotUrl: string, screenshotsDir: stri
 
 	return readme;
 }
-export function convertToMd(file: string, screenshotUrl: string, screenshotsDir: string) {
+export function convertToMd(file: string, packageFile: string, screenshotsDir: string) {
 	var fileDir = path.dirname(fullPath(file));
 
 	const md = path.join(fileDir, 'README.md');
@@ -97,7 +95,7 @@ export function convertToMd(file: string, screenshotUrl: string, screenshotsDir:
 	}
 
 	readme = contributors(readme);
-	readme = screenshots(readme, screenshotUrl, screenshotsDir);
+	readme = screenshots(readme, packageFile, screenshotsDir);
 	readme = readme.replace(new RegExp('^`$[\n\r]+([^`]*)[\n\r]+^`$', 'gm'), (codeblock, codeblockContents) => {
 		const lines = codeblockContents.split('\n');
 		// Add newline and indent all lines in the codeblock by one tab.

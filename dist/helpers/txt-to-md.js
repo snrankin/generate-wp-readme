@@ -27,20 +27,19 @@ function contributors(readme) {
     }
     return readme;
 }
-function screenshots(readme, screenshotUrl, screenshotsDir) {
+function screenshots(readme, packageFile, screenshotsDir) {
     // process screenshots, if any
     const screenshotMatch = readme.match(new RegExp('## Screenshots ##([^#]*)', 'im'));
-    if (screenshotUrl && screenshotMatch && screenshotMatch.length > 1) {
-        const plugin = (0, utils_1.getProjectSlug)();
+    if (packageFile && screenshotMatch && screenshotMatch.length > 1) {
         const imageDir = (0, utils_1.fullPath)(screenshotsDir);
-        const imageDirRel = path_1.default.relative(process.cwd(), imageDir);
+        const packagePath = path_1.default.dirname((0, utils_1.fullPath)(packageFile));
         // Collect screenshots content
         const screenshotFiles = [];
         let files = fs_extra_1.default.readdirSync(imageDir);
-        console.log('🚀 ~ file: txt-to-md.ts:48 ~ screenshots ~ files :', files);
         if (files.length > 0) {
             files.forEach(function (file) {
-                screenshotFiles.push(`./${imageDirRel}/${file}`);
+                const imageDirRel = path_1.default.relative(packagePath, path_1.default.join(imageDir, file));
+                screenshotFiles.push(imageDirRel);
             });
         }
         // parse screenshot list into array
@@ -64,7 +63,7 @@ function screenshots(readme, screenshotUrl, screenshotsDir) {
     }
     return readme;
 }
-function convertToMd(file, screenshotUrl, screenshotsDir) {
+function convertToMd(file, packageFile, screenshotsDir) {
     var fileDir = path_1.default.dirname((0, utils_1.fullPath)(file));
     const md = path_1.default.join(fileDir, 'README.md');
     let readme = (0, utils_1.fileContents)(file);
@@ -79,7 +78,7 @@ function convertToMd(file, screenshotUrl, screenshotsDir) {
         readme = readme.replace(headerSearch, headerReplace);
     }
     readme = contributors(readme);
-    readme = screenshots(readme, screenshotUrl, screenshotsDir);
+    readme = screenshots(readme, packageFile, screenshotsDir);
     readme = readme.replace(new RegExp('^`$[\n\r]+([^`]*)[\n\r]+^`$', 'gm'), (codeblock, codeblockContents) => {
         const lines = codeblockContents.split('\n');
         // Add newline and indent all lines in the codeblock by one tab.

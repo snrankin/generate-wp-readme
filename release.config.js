@@ -1,8 +1,8 @@
 /* eslint-disable no-template-curly-in-string */
 
-const preset = "conventionalcommits";
+const preset = 'conventionalcommits';
 
-require("dotenv-vault").config();
+require('dotenv-vault').config();
 
 console.log(process.env);
 
@@ -52,12 +52,12 @@ module.exports = {
 				preset,
 			},
 		],
-		'@semantic-release/changelog'
+		'@semantic-release/changelog',
 		[
 			'@semantic-release/github',
 			{
-				successComment: ':bookmark: Version ${nextRelease.version} is now available on [GitHub release](<github_release_url>)'
-				addReleases: 'top'
+				successComment: ':bookmark: Version ${nextRelease.version} is now available on [GitHub release](<github_release_url>)',
+				addReleases: 'top',
 			},
 		],
 		'@semantic-release/npm',

@@ -3,16 +3,15 @@
 import gradient from 'gradient-string';
 import fs from 'fs-extra';
 import { table, getBorderCharacters } from 'table';
-import { Command, Argument, Option } from 'commander';
-import { PKG, getPackageField, getProjectSlug, parsePluginMetadata, get, fileContents, StringDictionary, log, logColor, fullPath, isEmpty } from './helpers/utils';
-
-import conventionalChangelog from 'conventional-changelog';
-import { formatChangelog } from './helpers/changelog';
+import { Command, Option } from 'commander';
+import { PKG, getPackageField, getProjectSlug, log, logColor, fullPath, isEmpty } from './helpers/utils';
+import { writeChangelog } from './helpers/changelog';
+import { parsePluginMetadata } from './helpers/meta';
+import { readmeText } from './helpers/readme';
 import { convertToMd } from './helpers/txt-to-md';
 import figlet from 'figlet';
 import chalk from 'chalk';
-import { on } from 'events';
-
+import { env } from 'node:process';
 // const figlet = require('figlet');
 
 const program = new Command();
@@ -34,13 +33,16 @@ function getMergeCodeHelp() {
 		[chalk.magenta('{{__PLUGIN_LICENSE_URI__}}'), "The URI to the project's license.", 'License URI:', '--main-file'],
 		[chalk.magenta('{{__PLUGIN_MIN_WP_VERSION__}}'), 'The minimum required WordPress core version.', 'Requires at least:', '--main-file'],
 		[chalk.magenta('{{__PLUGIN_MIN_PHP_VERSION__}}'), 'The minimum required PHP version.', 'Requires PHP:', '--main-file'],
-		[chalk.magenta('{{__PLUGIN_TESTED_WP_VERSION__}}'), 'The latest WordPress core version the project has been tested against.', 'Tested up to:', '--main-file'],
+		[chalk.magenta('{{__PLUGIN_TESTED_WP_VERSION__}}'), 'The latest WordPress core version the plugin has been tested against.', 'Tested up to:', '--main-file'],
 		[chalk.magenta('{{__READ_MORE_LINK__}}'), 'A link to the full project changelog.', 'changelog:', 'package.json'],
 		[chalk.magenta('{{__CHANGELOG_ENTRIES__}}'), 'The most recent changelog entries.', '', '--changelog'],
 	];
 
 	const config: import('table').TableUserConfig = {
 		border: getBorderCharacters('norc'),
+		columns: {
+			1: { width: 30 },
+		},
 	};
 
 	return `\nMerge codes:\n\n  The following merge codes can be used in any of the readme part markdown files.\n\n${table(data, config)}`;
@@ -51,82 +53,65 @@ program
 	.description(`${getPackageField<string>('description', '', PKG)}`)
 	.version(getPackageField<string>('version', '', PKG))
 	.option('-o, --output-file <filename>', 'Specify the output readme file name.', 'readme.txt')
-	.option('-c, --changelog <filename>', 'Specify the input changelog file name.', 'CHANGELOG.md')
+	.option('-c, --changelog-file <filename>', 'Specify the input changelog file name.', 'CHANGELOG.md')
 	.option('-m, --main-file <filename>', 'Specify the main plugin php file name where metadata is stored.')
 	.option('-t, --template-file <filename>', 'Specify the template readme file name.', '.readme-template')
-	.option('-s, --screenshots <directory>', 'Specify the directory where the screenshots are stored', 'docs/screenshots')
+	.option('-p, --package-file <filename>', 'Specify the package.json relative path.', 'package.json')
+	.option('-s, --screenshots <directory>', 'Specify the directory where the screenshots are stored', 'assets')
 	.option('-l, --changelog-length <number>', 'Specify the number of versions to display before truncating the changelog.', '5')
 	.option('-d, --debug', 'Debug your setup');
 
-program.addOption(
-	new Option('-p, --preset <preset>', 'Specify a conventional commits preset.').choices(['angular', 'atom', 'codemirror', 'conventionalcommits', 'ember', 'eslint', 'express', 'jquery', 'jshint']).default('conventionalcommits')
-);
+program.addOption(new Option('-p, --preset <preset>', 'Specify a conventional commits preset.').choices(['angular', 'atom', 'codemirror', 'conventionalcommits', 'ember', 'eslint', 'express', 'jquery', 'jshint']).default('conventionalcommits'));
 
+function run() {
+	let { outputFile, changelogFile, mainFile, templateFile, packageFile, changelogLength } = program.opts();
+	log(program.opts(), 'info');
+	if (isEmpty(mainFile)) {
+		mainFile = `${getProjectSlug()}.php`;
+	}
+	let templateFilePath = fullPath(templateFile),
+		mainFilePath = fullPath(mainFile),
+		changelogFilePath = fullPath(changelogFile);
+
+	if (!fs.pathExistsSync(templateFilePath)) {
+		program.error(`${chalk.cyan(templateFile)} file is missing!`, { exitCode: 9 });
+	}
+
+	if (!fs.pathExistsSync(mainFilePath)) {
+		program.error(`${chalk.cyan(mainFile)} file is missing!`, { exitCode: 9 });
+	}
+
+	if (!fs.pathExistsSync(changelogFilePath)) {
+		program.error(`${chalk.cyan(changelogFile)} file is missing!`, { exitCode: 9 });
+	}
+
+	if (fs.pathExistsSync(templateFilePath) && fs.pathExistsSync(mainFilePath) && fs.pathExistsSync(changelogFilePath)) {
+		const meta = parsePluginMetadata(mainFile, changelogFile);
+
+		readmeText(templateFile, mainFile, packageFile, changelogFile, changelogLength).then((res) => {
+			fs.writeFile(outputFile, res, (err: any) => {
+				if (err) {
+					program.error(err, { code: err.name });
+				}
+				log(`Generated the file ${chalk.cyan(outputFile)}`, 'success');
+			});
+		});
+	}
+}
 program
 	.hook('preAction', (thisCommand, actionCommand) => {
 		// Create the conventional commit changelog
-		let { changelog, preset, templateFile } = actionCommand.opts();
+		let { changelogFile, preset, debug } = actionCommand.opts();
+		env.debug = debug;
 
-		fs.ensureFileSync(changelog);
-		const writer = fs.createWriteStream(changelog);
-		const logStream = conventionalChangelog({
-			preset,
-		});
-		logStream.on('error', (err) => {
-			program.error(err.message, { code: err.name });
-		});
-		logStream.pipe(writer);
-
-		writer.on('finish', () => {
-			log(`Generated the file ${chalk.cyan(changelog)}`, 'success');
-		});
+		writeChangelog(changelogFile, preset);
 	})
-	.action(function ({ outputFile, changelog, mainFile, templateFile, changelogLength }) {
-		if (isEmpty(mainFile)) {
-			let mainfilename = `${getProjectSlug()}.php`;
-			mainFile = fullPath(mainfilename);
-		}
-		let templateFileFull = fullPath(templateFile);
-		if (!fs.pathExistsSync(fullPath(templateFileFull))) {
-			program.error('Template file is missing!', { exitCode: 9 });
-		}
-
-		if (!fs.pathExistsSync(fullPath(templateFile))) {
-			program.error('Template file is missing!', { exitCode: 9 });
-		}
-
-		const meta = parsePluginMetadata(mainFile);
-
-		var readMoreLink = new URL(changelog, getPackageField<string>('homepage', ''));
-
-		const replacements: StringDictionary = {
-			PLUGIN_NAME: get<string>(meta, 'Plugin Name', ''),
-			PLUGIN_SLUG: getProjectSlug(),
-			PLUGIN_URI: get<string>(meta, 'Plugin URI', ''),
-			PLUGIN_LICENSE: get<string>(meta, 'License', ''),
-			PLUGIN_LICENSE_URI: get<string>(meta, 'License URI', ''),
-			PLUGIN_MIN_WP_VERSION: get<string>(meta, 'Requires at least', ''),
-			PLUGIN_TESTED_WP_VERSION: get<string>(meta, 'Tested up to', ''),
-			PLUGIN_MIN_PHP_VERSION: get<string>(meta, 'Requires PHP', ''),
-			PLUGIN_DESCRIPTION: get<string>(meta, 'Description', ''),
-			PLUGIN_VERSION: getPackageField<string>('version'),
-			READ_MORE_LINK: readMoreLink.toString(),
-		};
-
-		let readme = fileContents(templateFile);
-		// Replace variables.
-		Object.entries(replacements).forEach(([key, val]) => {
-			readme = readme.replace(new RegExp(`{{__${key}__}}`, 'g'), val);
-		});
-
-		formatChangelog(changelog, outputFile, readme, changelogLength);
-		//convertToMd(outputFile, `./${screenshots}`, screenshots);
-		log(`Generated the file ${chalk.cyan(outputFile)}`, 'success');
-	})
+	.action(run)
 	.hook('postAction', (thisCommand, actionCommand) => {
-		let { outputFile, inputFile, mainFile, templateFile, screenshots, changelogLength, preset } = actionCommand.opts();
-		convertToMd(outputFile, `./${screenshots}`, screenshots);
+		let { outputFile, screenshots, packageFile } = actionCommand.opts();
+		convertToMd(outputFile, packageFile, screenshots);
 	});
+
 program.addHelpText('after', getMergeCodeHelp());
 program.addHelpText('beforeAll', gradient.rainbow(figlet.textSync('Generate WP ReadMe')));
 
@@ -138,5 +123,3 @@ program.configureOutput({
 });
 
 program.parse();
-const options = program.opts();
-if (options.debug) log(options);

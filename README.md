@@ -15,7 +15,8 @@
   </p>
 </p>
 
-![Downloads](https://img.shields.io/github/downloads/snrankin/generate-wp-readme/total) ![Contributors](https://img.shields.io/github/contributors/snrankin/generate-wp-readme?color=dark-green) ![Issues](https://img.shields.io/github/issues/snrankin/generate-wp-readme) ![License](https://img.shields.io/github/license/snrankin/generate-wp-readme)
+[![semantic-release: conventionalcommits](https://img.shields.io/badge/semantic--release-conventionalcommits-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release) ![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/snrankin/generate-wp-readme/main) ![Issues](https://img.shields.io/github/issues/snrankin/generate-wp-readme) ![License](https://img.shields.io/npm/l/%40snrankin%2Fgenerate-wp-readme)
+
 
 ## Table Of Contents
 
@@ -32,8 +33,6 @@
 * [Acknowledgements](#acknowledgements)
 
 ## About The Project
-
-![Screen Shot](images/screenshot.png)
 
 I wanted an easy way to keep the WordPress `readme.txt` in sync with information from git. This CLI tool generates a conventionalcommit changelog file, a readme.txt file, and a README.md file. Enjoy!
 

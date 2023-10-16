@@ -8,44 +8,7 @@ console.log(process.env);
 
 module.exports = {
 	plugins: [
-		[
-			'@semantic-release/commit-analyzer',
-			{
-				preset,
-				// presetConfig,
-				// parserOpts: parserConfig,
-				releaseRules: [
-					{
-						type: 'docs',
-						scope: '*README*',
-						release: 'patch',
-					},
-					{
-						type: 'build',
-						scope: 'deps',
-						release: 'patch',
-					},
-					{
-						type: 'docs',
-						scope: '*readme*',
-						release: 'patch',
-					},
-					{
-						type: 'refactor',
-						release: 'patch',
-					},
-					{
-						type: 'chore',
-						scope: 'release',
-						release: false,
-					},
-					{
-						scope: 'no-release',
-						release: false,
-					},
-				],
-			},
-		],
+		'@semantic-release/commit-analyzer',
 		[
 			'@semantic-release/release-notes-generator',
 			{
@@ -53,6 +16,14 @@ module.exports = {
 			},
 		],
 		'@semantic-release/changelog',
+		'@semantic-release/npm',
+		[
+			'@semantic-release/git',
+			{
+				assets: ['CHANGELOG.md', 'package.json', 'package-lock.json'],
+				message: 'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}', //eslint-disable-line
+			},
+		],
 		[
 			'@semantic-release/github',
 			{
@@ -60,7 +31,6 @@ module.exports = {
 				addReleases: 'top',
 			},
 		],
-		'@semantic-release/npm',
 	],
 	branches: ['main'],
 };

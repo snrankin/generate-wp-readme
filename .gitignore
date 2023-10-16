@@ -224,3 +224,8 @@ $RECYCLE.BIN/
 !example/**/*
 
 *.map
+
+.env*
+.flaskenv*
+!.env.project
+!.env.vault

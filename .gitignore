@@ -214,3 +214,13 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,windows,archives,backup,test,git,dotenv,visualstudiocode
+
+!example/
+!example/package.json
+!example/generate-wp-readme.php
+!example/screenshots/
+!example/screenshots/*
+!example/*.*
+!example/**/*
+
+*.map

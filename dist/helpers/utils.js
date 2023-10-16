@@ -163,11 +163,8 @@ const zip = (a, b) => Array.from(Array(Math.max(b.length, a.length)), (_, i) => 
 exports.zip = zip;
 const arraysToObject = (keys, values) => {
     let totalItems = Math.max(values.length, keys.length);
-    console.log('🚀 ~ file: utils.ts:179 ~ arraysToObject ~ totalItems:', totalItems);
     keys = keys.slice(0, totalItems);
-    console.log('🚀 ~ file: utils.ts:184 ~ arraysToObject ~ keys:', keys);
     values = values.slice(0, totalItems);
-    console.log('🚀 ~ file: utils.ts:188 ~ arraysToObject ~ values:', values);
     let obj = {};
     keys.forEach((key, i) => {
         obj[key] = values[i];

@@ -125,7 +125,7 @@ export function getPackageInfo(packageFile: string = 'package.json') {
 	}
 }
 
-export function getPackageField<Type>(field: string, defaultVal: string = '', packageFile: string = 'package.json'): Type {
+export function getPackageField<Type>(field: string, defaultVal: any = '', packageFile: string = 'package.json'): Type {
 	const packageData = getPackageInfo(packageFile);
 	const fieldVal = get<Type>(packageData, field, defaultVal);
 	return fieldVal;
@@ -176,15 +176,9 @@ export const zip = (a: any[], b: any[]) => Array.from(Array(Math.max(b.length, a
 export const arraysToObject = (keys: string[], values: string[]) => {
 	let totalItems = Math.max(values.length, keys.length);
 
-	console.log('🚀 ~ file: utils.ts:179 ~ arraysToObject ~ totalItems:', totalItems);
-
 	keys = keys.slice(0, totalItems);
 
-	console.log('🚀 ~ file: utils.ts:184 ~ arraysToObject ~ keys:', keys);
-
 	values = values.slice(0, totalItems);
-
-	console.log('🚀 ~ file: utils.ts:188 ~ arraysToObject ~ values:', values);
 
 	let obj: StringDictionary = {};
 	keys.forEach((key, i) => {

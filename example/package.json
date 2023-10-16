@@ -1,0 +1,25 @@
+{
+    "name": "example-plugin",
+    "version": "1.0.0",
+    "description": "Example plugin description",
+    "keywords": [
+        "wordpress",
+        "readme",
+        "template"
+    ],
+    "funding": "http://example.com/donate",
+    "homepage": "https://github.com/snrankin/generate-wp-readme#readme",
+    "bugs": {
+        "url": "https://github.com/snrankin/generate-wp-readme/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/snrankin/generate-wp-readme.git"
+    },
+    "license": "MIT",
+    "author": {
+        "name": "Sam Rankin",
+        "url": "https://profiles.wordpress.org/snrankin",
+        "email": "samrankin.dev@gmail.com"
+    }
+}

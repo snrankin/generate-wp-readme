@@ -1,11 +1,11 @@
 === {{__PLUGIN_NAME__}} ===
-Contributors: snrankin
-Tags: fixes, enhancements
-Requires at least: 5.6
-Requires at least: {{__PLUGIN_MIN_WP_VERSION__}}
-Tested up to: {{__PLUGIN_TESTED_WP_VERSION__}}
-Requires PHP: {{__PLUGIN_MIN_PHP_VERSION__}}
-Stable tag: trunk
+Contributors: {{__PLUGIN_CONTRIBUTORS__}}
+Tags: {{__PLUGIN_TAGS__}}
+Donate link: {{__PLUGIN_DONATE__}}
+Requires at least: {{__PLUGIN_MIN_WP__}}
+Tested up to: {{__PLUGIN_TESTED_WP__}}
+Requires PHP: {{__PLUGIN_MIN_PHP__}}
+Stable tag: {{__PLUGIN_VERSION__}}
 License: {{__PLUGIN_LICENSE__}}
 License URI: {{__PLUGIN_LICENSE_URI__}}
 
@@ -67,6 +67,6 @@ Answer to foo bar dilemma.
 
 == Changelog ==
 
-{{__CHANGELOG_ENTRIES__}}
+{{__PLUGIN_CHANGELOG__}}
 
-[See full list of changes here]({{__READ_MORE_LINK__}})
+[See full list of changes here]({{__PLUGIN_CHANGELOG_URI__}})

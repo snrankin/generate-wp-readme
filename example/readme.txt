@@ -1,11 +1,11 @@
 === Generate WP Readme ===
 Contributors: snrankin
-Tags: fixes, enhancements
-Requires at least: 5.6
+Tags: wordpress, readme, template
+Donate link: http://example.com/donate
 Requires at least: 5.6
 Tested up to: 6.2
 Requires PHP: 8.0
-Stable tag: trunk
+Stable tag: 1.0.0
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -67,11 +67,15 @@ Answer to foo bar dilemma.
 
 == Changelog ==
 
-= v0.8.0 - 2023-10-14 =
+= v0.8.0 - 2023-10-16 =
 
 **Features**
 * 🎉 initializing project [skip ci] (25baee7)
+* changelog.ts:** add function to format changelog entries and update readme file (762ed49)
+* index.ts:** add support for generating a conventional commit changelog (c7c1d5e)
 * release.config.js:** add release configuration file (95412cd)
 * templates:** add commit template files (f47aa1e)
+* txt-to-md.ts:** add functionality to convert a txt file to markdown format (3f02c88)
+* utils.ts:** add utility functions for working with files and objects (de1a0f4)
 
-[See full list of changes here](https://github.com/snrankin/examples/CHANGELOG.md)
+[See full list of changes here](https://github.com/snrankin/example/CHANGELOG.md)

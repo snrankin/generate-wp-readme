@@ -30,7 +30,7 @@
         "test": "generate-wp-readme -t example/.readme-template -m example/generate-wp-readme.php -o example/readme.txt -s example/screenshots -c example/CHANGELOG.md -p example/package.json --debug"
     },
     "bin": {
-        "generate-wp-readme": "./dist/index.js"
+        "generate-wp-readme": "dist/index.js"
     },
     "config": {
         "commitizen": {

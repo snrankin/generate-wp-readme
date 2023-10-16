@@ -1,0 +1,12 @@
+.editorconfig
+.env*
+.eslintignore
+.eslintrc.js
+.github
+.prettierignore
+.prettierrc
+.vscode
+example
+src
+tsconfig.json
+release.config.js

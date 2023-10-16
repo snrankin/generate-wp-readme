@@ -1,6 +1,8 @@
 import parseChangelog from 'changelog-parser';
 import { isEmpty, fileContents, log } from './utils';
 import fs from 'fs-extra';
+import conventionalChangelog from 'conventional-changelog';
+import chalk from 'chalk';
 function formatBody(entry: Record<string, string[]>): string[] {
 	var length = Object.keys(entry).length;
 	var lines: string[] = [];
@@ -25,43 +27,47 @@ function formatBody(entry: Record<string, string[]>): string[] {
 	return lines;
 }
 
-export function formatChangelog(inFile: string, outFile: string, readme: string, total: number = 5) {
-	let fileText = fileContents(inFile);
+export async function formatChangelog(changelog: string, total: number = 5) {
+	let fileText = fileContents(changelog);
+	const lines: string[] = [];
+
 	if (!isEmpty(fileText)) {
-		parseChangelog({
+		let entries = await parseChangelog({
 			text: fileText,
 			removeMarkdown: true,
-		}).then((entries: parseChangelog.Changelog) => {
-			const lines: string[] = [];
-
-			let i = 0;
-			let added = 0;
-
-			var versions = entries.versions.slice(0, total);
-
-			versions.forEach((tag) => {
-				var title = `= v${tag.version} - ${tag.date} =`;
-				if (i > 0) {
-					lines.push('');
-					lines.push('');
-				}
-				lines.push(title);
-				var tagBody = formatBody(tag.parsed);
-				lines.push(...tagBody);
-
-				i++;
-			});
-
-			var text = lines.join('\n');
-
-			readme = readme.replace('{{__CHANGELOG_ENTRIES__}}', text);
-
-			fs.writeFileSync(outFile, readme);
 		});
-	} else {
-		readme = readme.replace('{{__CHANGELOG_ENTRIES__}}', '');
+		let i = 0;
+		let added = 0;
 
-		fs.writeFileSync(outFile, readme);
-		log('Empty changelog!', 'warning');
+		var versions = entries.versions.slice(0, total);
+
+		versions.forEach((tag) => {
+			var title = `= v${tag.version} - ${tag.date} =`;
+			if (i > 0) {
+				lines.push('');
+				lines.push('');
+			}
+			lines.push(title);
+			var tagBody = formatBody(tag.parsed);
+			lines.push(...tagBody);
+
+			i++;
+		});
 	}
+
+	return lines.join('\n');
+}
+
+export function writeChangelog(changelog: string, preset: string) {
+	fs.ensureFileSync(changelog);
+	const writer = fs.createWriteStream(changelog);
+	const logStream = conventionalChangelog({
+		preset,
+	});
+
+	logStream.pipe(writer);
+
+	writer.on('finish', () => {
+		log(`Generated the file ${chalk.cyan(changelog)}`, 'success');
+	});
 }

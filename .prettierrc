@@ -7,8 +7,7 @@
 	"proseWrap": "never",
 	"quoteProps": "as-needed",
 	"bracketSpacing": true,
-	"printWidth": 240,
-	"arrowParens": "always",
+	"printWidth": 9999,
 	"overrides": [
 		{
 			"files": ["*.yml", "*.neon"],

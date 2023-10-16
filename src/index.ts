@@ -26,23 +26,24 @@ function getMergeCodeHelp() {
 	const data = [
 		[chalk.bold('Merge Code'), chalk.bold('Description'), chalk.bold('Field'), chalk.bold('Source')],
 		[chalk.magenta('{{__PLUGIN_NAME__}}'), 'The name of the plugin', 'Plugin Name:', '--main-file'],
+		[chalk.magenta('{{__PLUGIN_SLUG__}}'), 'Taken from the current working folder', '', 'process.cwd()'],
 		[chalk.magenta('{{__PLUGIN_URI__}}'), 'The plugin homepage', 'Plugin URI:', '--main-file'],
 		[chalk.magenta('{{__PLUGIN_DESCRIPTION__}}'), 'Plugin Description', 'Description:', '--main-file'],
-		[chalk.magenta('{{__PLUGIN_VERSION__}}'), 'The current project version.', 'version:', 'package.json'],
+		[chalk.magenta('{{__PLUGIN_VERSION__}}'), 'The current project version.', 'version:', '--package-file'],
 		[chalk.magenta('{{__PLUGIN_LICENSE__}}'), "The project's license.", 'License:', '--main-file'],
 		[chalk.magenta('{{__PLUGIN_LICENSE_URI__}}'), "The URI to the project's license.", 'License URI:', '--main-file'],
-		[chalk.magenta('{{__PLUGIN_MIN_WP_VERSION__}}'), 'The minimum required WordPress core version.', 'Requires at least:', '--main-file'],
-		[chalk.magenta('{{__PLUGIN_MIN_PHP_VERSION__}}'), 'The minimum required PHP version.', 'Requires PHP:', '--main-file'],
-		[chalk.magenta('{{__PLUGIN_TESTED_WP_VERSION__}}'), 'The latest WordPress core version the plugin has been tested against.', 'Tested up to:', '--main-file'],
-		[chalk.magenta('{{__READ_MORE_LINK__}}'), 'A link to the full project changelog.', 'changelog:', 'package.json'],
-		[chalk.magenta('{{__CHANGELOG_ENTRIES__}}'), 'The most recent changelog entries.', '', '--changelog'],
+		[chalk.magenta('{{__PLUGIN_MIN_WP__}}'), 'The minimum required WordPress core version.', 'Requires at least:', '--main-file'],
+		[chalk.magenta('{{__PLUGIN_MIN_PHP__}}'), 'The minimum required PHP version.', 'Requires PHP:', '--main-file'],
+		[chalk.magenta('{{__PLUGIN_TESTED_WP__}}'), 'The latest WordPress core version the plugin has been tested against.', 'Tested up to:', '--main-file'],
+		[chalk.magenta('{{__PLUGIN_DONATE__}}'), 'The plugin donation link.', 'funding:', '--package-file'],
+		[chalk.magenta('{{__PLUGIN_CONTRIBUTORS__}}'), 'The plugin contributors (including author)', 'author:, contributors:', '--package-file'],
+		[chalk.magenta('{{__PLUGIN_TAGS__}}'), 'The plugin tags', 'keywords:', '--package-file'],
+		[chalk.magenta('{{__PLUGIN_CHANGELOG_URI__}}'), 'A link to the full project changelog.', '', '--changelog-file'],
+		[chalk.magenta('{{__PLUGIN_CHANGELOG__}}'), 'The most recent changelog entries.', '', '--changelog-file'],
 	];
 
 	const config: import('table').TableUserConfig = {
 		border: getBorderCharacters('norc'),
-		columns: {
-			1: { width: 30 },
-		},
 	};
 
 	return `\nMerge codes:\n\n  The following merge codes can be used in any of the readme part markdown files.\n\n${table(data, config)}`;

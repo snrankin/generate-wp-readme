@@ -16,6 +16,7 @@
     "explorerExclude.backup": {},
     "php.suggest.basic": false,
     "conventionalCommits.scopes": [
-        "CHANGELOG.md"
+        "CHANGELOG.md",
+        "example"
     ]
 }

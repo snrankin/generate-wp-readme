@@ -1,3 +1,16 @@
+## [1.2.0](https://github.com/snrankin/generate-wp-readme/compare/v1.1.0...v1.2.0) (2023-11-03)
+
+
+### Features
+
+* add TypeScript declaration files for helpers and index files ([26abb5c](https://github.com/snrankin/generate-wp-readme/commit/26abb5c0722dbd05c08e70b5754a52bf0d31a4a5))
+
+
+### Bug Fixes
+
+* **.npmignore:** add .env.vault file to be ignored by npm package ([bc3a44f](https://github.com/snrankin/generate-wp-readme/commit/bc3a44f793cac9bb4939be0594799105a9a47ba8))
+* **changelog.js:** reverse the order of versions in formatChangelog function to display the latest versions first ([a930dca](https://github.com/snrankin/generate-wp-readme/commit/a930dca1bb1fb82ddabf5e4f02451fc2dbe3707d))
+
 ## [1.1.0](https://github.com/snrankin/generate-wp-readme/compare/v1.0.0...v1.1.0) (2023-10-16)
 
 
@@ -29,4 +42,3 @@
 * **release.config.js:** change single quotes to double quotes for consistency ([cf8d3fe](https://github.com/snrankin/generate-wp-readme/commit/cf8d3fe939d18745dbde48d22d165e5c4e363b95))
 * **txt-to-md.ts:** remove unused import StringDictionary from utils ([720559a](https://github.com/snrankin/generate-wp-readme/commit/720559a28b6dbcda93260718f44c1187771c6dc1))
 * **utils.ts:** change default value type of getPackageField function to any to allow for more flexibility in default values ([118ee70](https://github.com/snrankin/generate-wp-readme/commit/118ee701a91fe60c16fd6fecb60d3c7c0927a6e2))
-

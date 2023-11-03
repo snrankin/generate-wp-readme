@@ -6,11 +6,11 @@
 .prettierignore
 .prettierrc
 .vscode
+.env.vault
 example
 src
 tsconfig.json
 release.config.js
-
 .flaskenv*
 !.env.project
 !.env.vault

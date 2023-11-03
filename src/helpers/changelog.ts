@@ -1,8 +1,9 @@
 import parseChangelog from 'changelog-parser';
 import { isEmpty, fileContents, log } from './utils';
 import fs from 'fs-extra';
-import conventionalChangelog from 'conventional-changelog';
+import conventionalChangelog, { Options } from 'conventional-changelog';
 import chalk from 'chalk';
+import { env } from 'node:process';
 function formatBody(entry: Record<string, string[]>): string[] {
 	var length = Object.keys(entry).length;
 	var lines: string[] = [];
@@ -29,6 +30,7 @@ function formatBody(entry: Record<string, string[]>): string[] {
 
 export async function formatChangelog(changelog: string, total: number = 5) {
 	let fileText = fileContents(changelog);
+
 	const lines: string[] = [];
 
 	if (!isEmpty(fileText)) {
@@ -41,7 +43,7 @@ export async function formatChangelog(changelog: string, total: number = 5) {
 
 		var versions = entries.versions.slice(0, total);
 
-		versions.forEach((tag) => {
+		versions.reverse().forEach((tag) => {
 			var title = `= v${tag.version} - ${tag.date} =`;
 			if (i > 0) {
 				lines.push('');
@@ -61,9 +63,17 @@ export async function formatChangelog(changelog: string, total: number = 5) {
 export function writeChangelog(changelog: string, preset: string) {
 	fs.ensureFileSync(changelog);
 	const writer = fs.createWriteStream(changelog);
-	const logStream = conventionalChangelog({
-		preset,
-	});
+	var config: Options = {
+		append: true,
+		releaseCount: 0,
+	};
+	if (env.debug) {
+		config.debug = (str: any) => {
+			log(str, 'info');
+		};
+	}
+
+	const logStream = conventionalChangelog(config);
 
 	logStream.pipe(writer);
 

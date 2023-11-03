@@ -9,6 +9,7 @@ const utils_1 = require("./utils");
 const fs_extra_1 = __importDefault(require("fs-extra"));
 const conventional_changelog_1 = __importDefault(require("conventional-changelog"));
 const chalk_1 = __importDefault(require("chalk"));
+const node_process_1 = require("node:process");
 function formatBody(entry) {
     var length = Object.keys(entry).length;
     var lines = [];
@@ -44,7 +45,7 @@ async function formatChangelog(changelog, total = 5) {
         let i = 0;
         let added = 0;
         var versions = entries.versions.slice(0, total);
-        versions.forEach((tag) => {
+        versions.reverse().forEach((tag) => {
             var title = `= v${tag.version} - ${tag.date} =`;
             if (i > 0) {
                 lines.push('');
@@ -62,9 +63,16 @@ exports.formatChangelog = formatChangelog;
 function writeChangelog(changelog, preset) {
     fs_extra_1.default.ensureFileSync(changelog);
     const writer = fs_extra_1.default.createWriteStream(changelog);
-    const logStream = (0, conventional_changelog_1.default)({
-        preset,
-    });
+    var config = {
+        append: true,
+        releaseCount: 0,
+    };
+    if (node_process_1.env.debug) {
+        config.debug = (str) => {
+            (0, utils_1.log)(str, 'info');
+        };
+    }
+    const logStream = (0, conventional_changelog_1.default)(config);
     logStream.pipe(writer);
     writer.on('finish', () => {
         (0, utils_1.log)(`Generated the file ${chalk_1.default.cyan(changelog)}`, 'success');

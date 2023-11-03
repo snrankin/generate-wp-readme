@@ -10,3 +10,7 @@ example
 src
 tsconfig.json
 release.config.js
+
+.flaskenv*
+!.env.project
+!.env.vault

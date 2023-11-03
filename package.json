@@ -27,7 +27,7 @@
     "main": "./dist/index.js",
     "scripts": {
         "build": "npx tsc",
-        "test": "./dist/index.js -t example/.readme-template -m example/generate-wp-readme.php -o example/readme.txt -s example/screenshots -c example/CHANGELOG.md -p example/package.json --debug"
+        "test": "generate-wp-readme -t example/.readme-template -m example/generate-wp-readme.php -o example/readme.txt -s example/screenshots -c example/CHANGELOG.md -p example/package.json --debug"
     },
     "bin": {
         "generate-wp-readme": "dist/index.js"

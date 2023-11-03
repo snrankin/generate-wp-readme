@@ -59,14 +59,14 @@ program
 	.option('-t, --template-file <filename>', 'Specify the template readme file name.', '.readme-template')
 	.option('-p, --package-file <filename>', 'Specify the package.json relative path.', 'package.json')
 	.option('-s, --screenshots <directory>', 'Specify the directory where the screenshots are stored', 'assets')
-	.option('-l, --changelog-length <number>', 'Specify the number of versions to display before truncating the changelog.', '5')
+	.option('-l, --changelog-length <number>', 'Specify the number of versions to display before truncating the changelog.', '1')
 	.option('-d, --debug', 'Debug your setup');
 
 program.addOption(new Option('-p, --preset <preset>', 'Specify a conventional commits preset.').choices(['angular', 'atom', 'codemirror', 'conventionalcommits', 'ember', 'eslint', 'express', 'jquery', 'jshint']).default('conventionalcommits'));
 
 function run() {
 	let { outputFile, changelogFile, mainFile, templateFile, packageFile, changelogLength } = program.opts();
-	log(program.opts(), 'info');
+	// log(program.opts(), 'info');
 	if (isEmpty(mainFile)) {
 		mainFile = `${getProjectSlug()}.php`;
 	}
@@ -103,6 +103,7 @@ program
 	.hook('preAction', (thisCommand, actionCommand) => {
 		// Create the conventional commit changelog
 		let { changelogFile, preset, debug } = actionCommand.opts();
+
 		env.debug = debug;
 
 		writeChangelog(changelogFile, preset);
